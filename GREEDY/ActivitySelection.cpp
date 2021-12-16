@@ -31,4 +31,5 @@ int main(){
         arr[i].finish = finishTime[i];
     }
     maxActivity(arr,n);
+    cout<<"Activites are"<<endl;
 }
