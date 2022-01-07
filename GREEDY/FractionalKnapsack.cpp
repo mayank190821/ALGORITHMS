@@ -1,36 +1,53 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-struct knapsack{
+/*
+    * Item      I       II      III     IV
+    * Weight    5       3       4       2
+    * Value     100     60      40      120
+    * Ratio     20      20      10      60
+    kanpsackCapacity = 10
+    Ans = 260
+*/
+struct kanpsackProblem{
     int value;
     int weight;
 };
-bool comparision(knapsack k1, knapsack k2){
-    double r1 = double(k1.value)/k1.weight;
-    double r2 = double(k2.value)/k2.weight;
+bool ratioComparision(kanpsackProblem k1,kanpsackProblem k2){
+    double r1 = double(k1.value)/double(k1.weight);
+    double r2 = double(k2.value)/double(k2.weight);
     return r1>r2;
 }
-int fKnapsack(knapsack kn[],int n,int w){
-    sort(kn,kn+n,comparision);
-    int curWgh = 0;
-    double finalValue=0.0;
-    for(int i = 0;i<n;i++){
-        if(curWgh + kn[i].weight<=w){
-            finalValue += kn[i].value;
-            curWgh += kn[i].weight; 
+
+float fKnapsack(kanpsackProblem kn[],int n,int capacity){
+    float maxValue=0;
+    int curW=0;
+    float remain=0;
+    sort(kn,kn+n,ratioComparision);
+    for(int i=0;i<n;i++){
+        if(curW+kn[i].weight<capacity){
+            curW +=kn[i].weight;
+            maxValue+=kn[i].value;
         }
         else{
-            int remain = w-curWgh;
-            finalValue += kn[i].value*( (double) remain/kn[i].weight); 
+            remain=capacity-curW;
+            cout<<kn[i].value<< "   "<<remain<<endl;
+            maxValue+= kn[i].value * (remain/kn[i].weight);
             break;
         }
     }
-    return finalValue;
+    return maxValue;
 }
+
 int main(){
-    int n=5;
-    int w=50;
-    knapsack kn[n] = {{60,10},{100,20},{120,30},{90,40},{50,5}};
-    cout<<"Maximum value:  "<<fKnapsack(kn,n,w);
-    return 0;
+    int n;
+    int capacity;
+    cin>>n;
+    cin>>capacity;
+    kanpsackProblem kn[n];
+    for(int i=0;i<n;i++){
+        cin>>kn[i].value;
+        cin>>kn[i].weight;
+    }
+    cout<<"Maximum Value: "<<fKnapsack(kn,n,capacity);
 }
